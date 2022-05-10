@@ -1,60 +1,86 @@
 #include <iostream>
+#include <conio.h>
+#include <windows.h>
 
 using namespace std;
 
-int SSort(int* Array, int Count)// 정렬 퀵 소트라는 방법
+struct FVector2D
 {
-	for (int i = 0; i < Count; ++i)
-	{
-		for (int j = 0; j < Count; ++j)
-		{
-			if (Array[i] < Array[j])
-			{
-				int Temp = Array[i];
-				Array[i] = Array[j];
-				Array[j] = Temp;
-			}
-		}
-	}
-}
+    int X;
+    int Y;
+};
 
+void SetLocation(FVector2D NewLocation);
 
-int ArraySum(int* Array, int Count)
-{
-	int Sum = 0;
-
-	for (int i = 0; i < Count; ++i)
-	{
-		Sum += Array[i];
-	}
-
-	return Sum;
-}
 
 int main()
 {
-	int Count = 0;
 
-	cin >> Count;
+    bool bRunning = true;
+    FVector2D PlayerPosition;
+    PlayerPosition.X = 2;
+    PlayerPosition.Y = 2;
 
-	int* Array = new int[Count];
+    while (bRunning)
+    {
+        int KeyCode = _getch();
 
-	for (int i = 0; i < Count; ++i)
-	{
-		cin >> Array[i];
-	}
+        switch (KeyCode)
+        {
+        case 'w':
+        case 'W':
+            PlayerPosition.Y--;
+            break;
+        case 's':
+        case 'S':
+            PlayerPosition.Y++;
+            break;
+        case 'a':
+        case 'A':
+            PlayerPosition.X--;
+            break;
+        case 'd':
+        case 'D':
+            PlayerPosition.X++;
+            break;
+        case 27:
+            bRunning = false;
+            break;
 
-	int Sum = ArraySum(Array, Count);
+        }
 
-	cout << Sum << endl;
+        PlayerPosition.X = PlayerPosition.X < 1 ? 1 : PlayerPosition.X;
+        PlayerPosition.Y = PlayerPosition.Y < 1 ? 1 : PlayerPosition.Y;
+        PlayerPosition.X = PlayerPosition.X > 8 ? 8 : PlayerPosition.X;
+        PlayerPosition.Y = PlayerPosition.Y > 8 ? 8 : PlayerPosition.Y;
 
-	
+        system("cls");
+
+        cout << "##########" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "#        #" << endl;
+        cout << "##########" << endl;
+
+        SetLocation(PlayerPosition);
+
+        cout << "P";
+    }
 
 
-	for (int i = 0; i < Count; ++i)
-	{
-		cout << Array[i] << endl;
-	}
+    return 0;
+}
 
-	return 0;
+
+void SetLocation(FVector2D NewLocation)
+{
+    COORD Cur;
+    Cur.X = NewLocation.X;
+    Cur.Y = NewLocation.Y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
